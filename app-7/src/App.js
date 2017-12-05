@@ -11,20 +11,23 @@ class App extends Component {
       list: []
     };
 
-    this.listChange = this.listChange.bind(this);
+    this.addTask = this.addTask.bind(this);
   }
 
-  listChange(task) {
+  addTask(task) {
+    let taskList = this.state.list;
+    taskList.push(task);
     this.setState({
-      list: [this.state.list, task]
+      list: taskList
     });
   }
+
   render() {
     return (
       <div className="App">
         <h1>My to-do list:</h1>
-        <NewTask updateTask={this.listChange} />
-        <List updateList={this.state.list} />
+        <NewTask addTask={this.addTask} />
+        <List newList={this.state.list} />
       </div>
     );
   }
