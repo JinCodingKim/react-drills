@@ -1,18 +1,45 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import axios from "axios";
+import CharacterInfo from "./components/CharacterInfo/CharacterInfo";
+import CharacterChoose from "./components/CharacterChoose/CharacterChoose";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      characterToDisplay: [],
+      baseUrl: "https://swapi.co"
+    };
+
+    this.characterUpdate = this.characterUpdate.bind(this);
+  }
+
+  componentDidMount() {
+    axios
+      .get(`${this.state.baseUrl}/api/people/${this.state.id}/`)
+      .then(response => {
+        this.setState({
+          characterToDisplay: response.data
+        });
+      })
+      .catch(console.log);
+  }
+
+  characterUpdate(task) {
+    let characterList = this.state.characterToDisplay;
+    characterList.push(task);
+    this.setState({
+      characterToDisplay: characterList
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <CharacterChoose characterUpdate={this.characterUpdate} />
+        <CharacterInfo characterDisplay={this.state.characterToDisplay} />
       </div>
     );
   }
